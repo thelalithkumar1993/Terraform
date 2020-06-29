@@ -1,18 +1,23 @@
-resource "aws_instance" "MyFirstEc2instance_from_terraform" {
-  ami = "ami-0b898040803850657"
+resource "aws_instance" "PublicEC2" {
+  ami =   "ami-0b898040803850657"
   instance_type = "t2.micro"
+  vpc_security_group_ids = ["${aws_security_group.allow_ssh.id}"]
+  subnet_id = "${aws_subnet.PublicSubnet_A.id}"
+  key_name = "ec2_keypair"
   tags = {
-      Name = "EC2started_from_console_from_terraform"
+    Name = "PublicEC2"
   }
-  key_name = "ec2demo_1"
-  user_data = <<-EOF
-                #!/bin/bash
-                yum update -y
-                yum install -y httpd
-                systemctl start httpd.service
-                systemctl enable httpd.service
-                echo "Hi Friend , I am $(hostname -f) hosted by Terraform" > /var/www/html/index.html
-                EOF
+  depends_on = ["aws_vpc.mainvpc","aws_subnet.PublicSubnet_A","aws_security_group.allow_ssh"]
 }
 
-
+resource "aws_instance" "PrivateEC2" {
+  ami =   "ami-0b898040803850657"
+  instance_type = "t2.micro"
+  vpc_security_group_ids = ["${aws_security_group.allow_ssh.id}"]
+  subnet_id = "${aws_subnet.PrivateSubnet_A.id}"
+  key_name = "ec2_keypair"
+  tags = {
+    Name = "PrivateEC2"
+  }
+  depends_on = ["aws_vpc.mainvpc","aws_subnet.PrivateSubnet_A","aws_security_group.allow_ssh"]
+}
