@@ -1,3 +1,4 @@
+#Creating a new Route Table
 resource "aws_route_table" "PublicRouteTable" {
   vpc_id = "${aws_vpc.mainvpc.id}"
   route {
@@ -7,6 +8,7 @@ resource "aws_route_table" "PublicRouteTable" {
   tags = {
       Name = "PublicRouteTable"
   }
+#route table depends on VPC and IGW
   depends_on = ["aws_vpc.mainvpc","aws_internet_gateway.IGW_TF"]
 }
 
