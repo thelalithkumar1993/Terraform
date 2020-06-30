@@ -2,6 +2,7 @@ resource "aws_subnet" "PublicSubnet_A" {
   vpc_id     = "${aws_vpc.mainvpc.id}"
   cidr_block = "10.0.0.0/24"
   availability_zone = "us-east-1a"
+#map_public_ip_on_launch(Specify true to indicate that instances launched into the subnet should be assigned a public IP address)
   map_public_ip_on_launch = true
 
   tags = {
