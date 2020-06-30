@@ -1,3 +1,4 @@
+#VPC
 resource "aws_vpc" "mainvpc" {
   cidr_block            = "10.0.0.0/16"
   instance_tenancy      = "default"
@@ -8,7 +9,7 @@ resource "aws_vpc" "mainvpc" {
   }
 
 }
-
+#Security- inbound and outbound rules
 resource "aws_security_group" "allow_ssh" {
     name        = "allow_ssh"
     description = "Allow SSH inbound traffic/ Allow all outbound traffic"
@@ -30,10 +31,10 @@ resource "aws_security_group" "allow_ssh" {
     tags = {
         Name = "SecurityGroup_TF"
     }
-
+    # depends on VPC
     depends_on = ["aws_vpc.mainvpc"]
 }
-
+#IGW
 resource "aws_internet_gateway" "IGW_TF" {
   vpc_id = "${aws_vpc.mainvpc.id}"
 
@@ -42,7 +43,7 @@ resource "aws_internet_gateway" "IGW_TF" {
   }
   depends_on = ["aws_vpc.mainvpc"]
 }
-
+#EIP
 resource "aws_eip" "EIP" {
   vpc              = true
   tags = {
@@ -50,7 +51,7 @@ resource "aws_eip" "EIP" {
   }
 
 }
-
+#NAT gateway
 resource "aws_nat_gateway" "NATGW" {
     allocation_id = "${aws_eip.EIP.id}"
     subnet_id = "${aws_subnet.PublicSubnet_A.id}"
