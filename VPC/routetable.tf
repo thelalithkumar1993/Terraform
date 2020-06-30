@@ -18,7 +18,7 @@ resource "aws_route_table_association" "publicroutetableassociation" {
   route_table_id = "${aws_route_table.PublicRouteTable.id}"
   depends_on     = ["aws_subnet.PublicSubnet_A","aws_route_table.PublicRouteTable"]
 }
-
+#creating a Private Route table and it is associated with NAT gateway and a Private Subnet
 resource "aws_route_table" "PrivateRouteTable" {
   vpc_id     = "${aws_vpc.mainvpc.id}"
   route {
